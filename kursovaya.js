@@ -5,7 +5,7 @@ const keyWord = 'find';
 
 const assertion = {
   WhereIs: (object, value) => object === value,
-  Empty: (object, value) => object.length === 0,
+  Empty: (object) => object.length === 0,
 };
 
 const assertNames = Object.keys(assertion);
