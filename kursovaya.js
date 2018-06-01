@@ -43,6 +43,7 @@ const handler = {
     } else {
       obj[prop] = value;
     }
+  return value;
   }
 };
 
