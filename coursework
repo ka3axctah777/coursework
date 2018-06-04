@@ -5,7 +5,6 @@ const keyWord = 'find';
 
 const assertion = {
   WhereIs: (object, value) => object === value,
-  Empty: (object, value) => object.length === 0,
 };
 
 const assertNames = Object.keys(assertion);
@@ -30,11 +29,11 @@ const arr = wrap([
   { car: 'Dacia', model: '1300', year: 1969 },
   { car: 'Ferrari', model: '488GTB', year: 2016 },
   { car: 'BMW', model: 'X5', year: 1999 },
+  { car: 'Peshkom', model: 'kpi', year: 2018 },
   {}
 ]);
 
 console.log(arr.findCarWhereIs('BMW'));
-console.log(arr.findEmpty);
 
 const handler = {
   set(obj, prop, value) {
@@ -43,6 +42,7 @@ const handler = {
     } else {
       obj[prop] = value;
     }
+    return value;
   }
 };
 
@@ -55,4 +55,44 @@ proxyObj.name = 'abcd';
 
 console.log(proxyObj);
 
+function changeFields(data) {
+  let tempObj = {};
+  function commit() {
+    Object.assign(data, tempObj);
+    tempObj = {};
+  }
+  return new Proxy(data, {
+    get(target, key) {
+      if (key === 'commit') {
+        return commit;
+      }
+      if (tempObj.hasOwnProperty(key)) {
+        return tempObj[key];
+      }
+      return target[key];
+    },
+    set(target, key, val) {
+      if (target[key] === val) {
+        delete tempObj[key];
+      } else {
+        tempObj[key] = val;
+      }
+      return true;
+    }
+  });
+}
+const data = { field1: 'abcd', field2: 101 };
 
+console.log('Do perenosa');
+console.log(data.field1);
+console.log(data.field2);
+
+const perenos = changeFields(data);
+
+perenos.field1 = 'ghgh';
+perenos.field2 = 456;
+perenos.commit();
+
+console.log('Posle');
+console.log(data.field1);
+console.log(data.field2);
