@@ -30,7 +30,6 @@ const arr = wrap([
   { car: 'Ferrari', model: '488GTB', year: 2016 },
   { car: 'BMW', model: 'X5', year: 1999 },
   { car: 'Peshkom', model: 'kpi', year: 2018 },
-  {}
 ]);
 
 console.log(arr.findCarWhereIs('BMW'));
